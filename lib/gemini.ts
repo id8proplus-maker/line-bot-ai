@@ -19,7 +19,7 @@ export async function askGemini(
   ).replace("{USER_MESSAGE}", safeQuestion);
 
   const response = await genai.models.generateContent({
-    model: "gemini-3.5-flash",
+    model: "gemini-2.0-flash",
     contents: prompt,
     config: {
       temperature: 1.0,
@@ -30,7 +30,7 @@ export async function askGemini(
   const candidate = response.candidates?.[0];
   const finishReason = candidate?.finishReason ?? "UNKNOWN";
   const thoughtsTokenCount =
-    candidate?.tokenCount ?? response.usageMetadata?.thoughtsTokenCount ?? 0;
+    response.usageMetadata?.thoughtsTokenCount ?? 0;
   const candidatesTokenCount =
     response.usageMetadata?.candidatesTokenCount ?? 0;
 
