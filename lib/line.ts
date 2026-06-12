@@ -1,8 +1,10 @@
-import { Client, validateSignature } from "@line/bot-sdk";
+import { validateSignature, messagingApi } from "@line/bot-sdk";
 
-const client = new Client({
-  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN!,
-});
+function getClient(): messagingApi.MessagingApiClient {
+  return new messagingApi.MessagingApiClient({
+    channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN!,
+  });
+}
 
 export function verifySignature(body: string, signature: string): boolean {
   return validateSignature(
@@ -16,8 +18,8 @@ export async function replyMessage(
   replyToken: string,
   text: string
 ): Promise<void> {
-  await client.replyMessage(replyToken, {
-    type: "text",
-    text,
+  await getClient().replyMessage({
+    replyToken,
+    messages: [{ type: "text", text }],
   });
 }
